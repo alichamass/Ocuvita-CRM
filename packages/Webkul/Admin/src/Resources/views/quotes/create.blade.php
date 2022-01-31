@@ -428,13 +428,13 @@
                     <input
                         type="text"
                         class="control"
-                        :value="parseInt(product.price * product.quantity) + parseInt(product.tax_amount) - parseInt(product.discount_amount)"
+                        :value="parseFloat(product.price * product.quantity) + parseFloat(product.tax_amount) - parseFloat(product.discount_amount)"
                         readonly/>
                 </div>
             </td>
 
             <td class="actions">
-                <i class="icon trash-icon" @click="removeProduct"></i>
+                <i class="icon trash-icon" @click="removeProduct" v-if="this.$parent.products.length > 1"></i>
             </td>
         </tr>
     </script>
@@ -469,7 +469,7 @@
                     var total = 0;
 
                     this.products.forEach(product => {
-                        total += parseInt(product.price * product.quantity);
+                        total += parseFloat(product.price * product.quantity);
                     });
 
                     return total;
@@ -479,7 +479,7 @@
                     var total = 0;
 
                     this.products.forEach(product => {
-                        total += parseInt(product.discount_amount);
+                        total += parseFloat(product.discount_amount);
                     });
 
                     return total;
@@ -489,7 +489,7 @@
                     var total = 0;
 
                     this.products.forEach(product => {
-                        total += parseInt(product.tax_amount);
+                        total += parseFloat(product.tax_amount);
                     });
 
                     return total;
@@ -499,7 +499,7 @@
                     var total = 0;
 
                     this.products.forEach(product => {
-                        total += parseInt(product.price * product.quantity) + parseInt(product.tax_amount) - parseInt(product.discount_amount) + parseInt(this.adjustmentAmount);
+                        total += parseFloat(product.price * product.quantity) + parseFloat(product.tax_amount) - parseFloat(product.discount_amount) + parseFloat(this.adjustmentAmount);
                     });
 
                     return total;

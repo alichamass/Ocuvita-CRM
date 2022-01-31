@@ -144,12 +144,18 @@ class LeadController extends Controller
         } else {
             $pipeline = $this->pipelineRepository->getDefaultPipeline();
 
-            $data['lead_pipeline_stage_id'] = $pipeline->stages()->first()->id;
+            $stage = $pipeline->stages()->first();
+
+            $data['lead_pipeline_id'] = $pipeline->id;
+
+            $data['lead_pipeline_stage_id'] = $stage->id;
+        }
+
+        if (in_array($stage->code, ['won', 'lost'])) {
+            $data['closed_at'] = Carbon::now();
         }
 
         $lead = $this->leadRepository->create($data);
-
-        $this->leadRepository->getUserByLeadId($lead->id);
 
         Event::dispatch('lead.create.after', $lead);
 
@@ -204,7 +210,6 @@ class LeadController extends Controller
 
         if (request()->ajax()) {
             return response()->json([
-                'status'  => true,
                 'message' => trans('admin::app.leads.update-success'),
             ]);
         } else {
@@ -250,12 +255,10 @@ class LeadController extends Controller
             Event::dispatch('lead.delete.after', $id);
 
             return response()->json([
-                'status'  => true,
                 'message' => trans('admin::app.response.destroy-success', ['name' => trans('admin::app.leads.lead')]),
             ], 200);
         } catch (\Exception $exception) {
             return response()->json([
-                'status'  => false,
                 'message' => trans('admin::app.response.destroy-failed', ['name' => trans('admin::app.leads.lead')]),
             ], 400);
         }
@@ -281,7 +284,6 @@ class LeadController extends Controller
         }
 
         return response()->json([
-            'status'  => true,
             'message' => trans('admin::app.response.update-success', ['name' => trans('admin::app.leads.title')])
         ]);
     }
@@ -293,12 +295,15 @@ class LeadController extends Controller
      */
     public function massDestroy()
     {
-        $data = request()->all();
+        foreach (request('rows') as $leadId) {
+            Event::dispatch('lead.delete.before', $leadId);
 
-        $this->leadRepository->destroy($data['rows']);
+            $this->leadRepository->delete($leadId);
+
+            Event::dispatch('lead.delete.after', $leadId);
+        }
 
         return response()->json([
-            'status'  => true,
             'message' => trans('admin::app.response.destroy-success', ['name' => trans('admin::app.leads.title')]),
         ]);
     }

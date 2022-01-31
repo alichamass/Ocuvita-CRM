@@ -232,18 +232,18 @@ class LeadDataGrid extends DataGrid
         $values = $this->pipeline->stages()
             ->get(['name', 'code as key', DB::raw('false as isActive')])
             ->prepend([
-                'isActive'  => true,
-                'key'       => 'all',
-                'name'      => trans('admin::app.datagrid.all'),
+                'isActive' => true,
+                'key'      => 'all',
+                'name'     => trans('admin::app.datagrid.all'),
             ])
             ->toArray();
 
         $this->addTabFilter([
-            'type'              => 'pill',
-            'key'               => 'type',
-            'condition'         => 'eq',
-            'value_type'        => 'lookup',
-            'values'            => $values,
+            'type'       => 'pill',
+            'key'        => 'type',
+            'condition'  => 'eq',
+            'value_type' => 'lookup',
+            'values'     => $values,
         ]);
     }
 
@@ -279,7 +279,7 @@ class LeadDataGrid extends DataGrid
     {
         $stages = [];
 
-        foreach ($this->stageRepository->get(['id', 'name'])->toArray() as $stage) {
+        foreach ($this->pipeline->stages->toArray() as $stage) {
             $stages[$stage['name']] = $stage['id'];
         }
 

@@ -346,6 +346,7 @@
             'update-success'      => ':type updated successfully.',
             'destroy-success'     => ':type deleted successfully.',
             'delete-failed'       => ':type can not be deleted.',
+            'typing-placeholder'  => 'Start typing name',
         ],
 
         'products' => [
@@ -459,6 +460,7 @@
                 'user-define-error'   => 'Can not delete system user.',
                 'mass-update-success' => 'Users updated successfully.',
                 'mass-delete-success' => 'Users deleted successfully.',
+                'mass-delete-failed'  => 'Users can not be deleted.',
             ],
 
             'attributes' => [
@@ -735,6 +737,11 @@
             'lead'            => 'Lead',
             'quotes'          => 'Quotes',
             'mail'            => 'Mail',
+            'inbox'           => 'Inbox',
+            'draft'           => 'Draft',
+            'outbox'          => 'Outbox',
+            'sent'            => 'Sent',
+            'trash'           => 'Trash',
             'activities'      => 'Activities',
             'contacts'        => 'Contacts',
             'persons'         => 'Persons',
@@ -754,6 +761,7 @@
             'workflows'       => 'Workflows',
             'other-settings'  => 'Other Settings',
             'tags'            => 'Tags',
+            'configuration'   => 'Configuration',
             'create'          => 'Create',
             'edit'            => 'Edit',
             'view'            => 'View',
@@ -785,7 +793,11 @@
             'save'                => 'Save',
             'add-as'              => 'Add as new',
             'no-records-found'    => 'No Records Found',
-            'start-typing'        => 'Start typing to search records'
+            'start-typing'        => 'Start typing to search records',
+            'select-type'         => 'Select Type',
+            'select-call'         => 'Call',
+            'select-meeting'      => 'Meeting',
+            'select-lunch'        => 'Lunch',
         ],
 
         'user' => [
