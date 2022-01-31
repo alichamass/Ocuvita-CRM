@@ -111,6 +111,7 @@ return [
 
     'available_locales' => [
         'en' => 'English',
+        'ar' => 'Arabic',
     ],
 
     /*
@@ -234,6 +235,7 @@ return [
         Webkul\Tag\Providers\TagServiceProvider::class,
         Webkul\UI\Providers\UIServiceProvider::class,
         Webkul\User\Providers\UserServiceProvider::class,
+        Webkul\WebForm\Providers\WebFormServiceProvider::class,
         Webkul\Workflow\Providers\WorkflowServiceProvider::class,
     ],
 

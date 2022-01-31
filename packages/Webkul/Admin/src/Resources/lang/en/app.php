@@ -175,6 +175,7 @@
             'schedule'                 => 'Schedule',
             'from'                     => 'From',
             'to'                       => 'To',
+            'location'                 => 'Location',
             'participants'             => 'Participants',
             'participant-info'         => 'Start typing name',
             'users'                    => 'Users',
@@ -207,6 +208,8 @@
             'planned'                  => 'Planned',
             'done'                     => 'Done',
             'edit'                     => 'Edit',
+            'view'                     => 'View',
+            'unlink'                   => 'Unlink',
             'mark-as-done'             => 'Mark as Done',
             'remove'                   => 'Remove',
             'export-to-pdf'            => 'Export To PDF',
@@ -216,7 +219,6 @@
             'call-scheduled'           => 'Call scheduled at :from - :to',
             'meeting-scheduled'        => 'Meeting scheduled at :from - :to',
             'lunch-scheduled'          => 'Lunch scheduled at :from - :to',
-            'email-scheduled'          => 'Email scheduled at :from - :to',
             'file-added'               => 'File added',
             'quote-destroy-success'    => 'Quote removed successfully.',
             'tag-create-success'       => 'Tag added successfully.',
@@ -265,7 +267,8 @@
             'sub-total'           => 'Sub Total',
             'tax'                 => 'Tax',
             'adjustment'          => 'Adjustment',
-            'grand-total'         => 'Grand Total'
+            'grand-total'         => 'Grand Total',
+            'search'              => 'Search..'
         ],
 
         'mail' => [
@@ -307,6 +310,7 @@
             'saved-to-draft'          => 'Email saved to draft.',
             'delete-success'          => 'Email deleted successfully.',
             'delete-failed'           => 'Email can not be deleted.',
+            'mass-update-success'     => 'Emails updated successfully.',
 
             'forget-password' => [
                 'subject'           => 'Customer Reset Password',
@@ -324,28 +328,34 @@
         ],
 
         'activities' => [
-            'title'               => 'Activities',
-            'title-control'       => 'Title',
-            'edit-title'          => 'Edit Activity',
-            'save-btn-title'      => 'Save as Activity',
-            'back'                => 'Back',
-            'type'                => 'Type',
-            'note'                => 'Note',
-            'call'                => 'Call',
-            'meeting'             => 'Meeting',
-            'lunch'               => 'Lunch',
-            'file'                => 'File',
-            'description'         => 'Description',
-            'schedule'            => 'Schedule',
-            'from'                => 'From',
-            'to'                  => 'To',
-            'participants'        => 'Participants',
-            'file-upload-success' => 'File(s) uploaded successfully.',
-            'file-upload-error'   => 'File(s) can not be uploaded.',
-            'create-success'      => ':type created successfully.',
-            'update-success'      => ':type updated successfully.',
-            'destroy-success'     => ':type deleted successfully.',
-            'delete-failed'       => ':type can not be deleted.',
+            'title'                => 'Activities',
+            'title-control'        => 'Title',
+            'edit-title'           => 'Edit Activity',
+            'save-btn-title'       => 'Save as Activity',
+            'back'                 => 'Back',
+            'type'                 => 'Type',
+            'note'                 => 'Note',
+            'call'                 => 'Call',
+            'meeting'              => 'Meeting',
+            'lunch'                => 'Lunch',
+            'file'                 => 'File',
+            'description'          => 'Description',
+            'schedule'             => 'Schedule',
+            'from'                 => 'From',
+            'to'                   => 'To',
+            'location'             => 'Location',
+            'participants'         => 'Participants',
+            'lead'                 => 'Lead',
+            'duration-overlapping' => 'Participants have another meeting at this time. Do you want to continue?',
+            'file-upload-success'  => 'File(s) uploaded successfully.',
+            'file-upload-error'    => 'File(s) can not be uploaded.',
+            'create-success'       => ':type created successfully.',
+            'update-success'       => ':type updated successfully.',
+            'mass-update-success'  => 'Activities updated successfully.',
+            'mass-update-failed'   => 'Activities can not be updated.',
+            'destroy-success'      => ':type deleted successfully.',
+            'delete-failed'        => ':type can not be deleted.',
+            'typing-placeholder'   => 'Start typing name',
         ],
 
         'products' => [
@@ -458,7 +468,9 @@
                 'last-delete-error'   => 'At least one user is required.',
                 'user-define-error'   => 'Can not delete system user.',
                 'mass-update-success' => 'Users updated successfully.',
+                'mass-update-failed'  => 'Users can not be updated.',
                 'mass-delete-success' => 'Users deleted successfully.',
+                'mass-delete-failed'  => 'Users can not be deleted.',
             ],
 
             'attributes' => [
@@ -507,7 +519,8 @@
                 'update-error'          => 'Unable to update attribute.',
                 'delete-success'        => 'Attribute deleted successfully.',
                 'delete-failed'         => 'Attribute can not be deleted.',
-                'user-define-error'     => 'Can not delete system attribute.'
+                'user-define-error'     => 'Can not delete system attribute.',
+                'mass-delete-failed'    => 'Attributes can not be deleted.',
             ],
 
             'pipelines' => [
@@ -540,6 +553,7 @@
                 'back'           => 'Back',
                 'cancel'         => 'Cancel',
                 'create-success' => 'Source created successfully.',
+                'name-exists'    => 'Source name already exists.',
                 'update-success' => 'Source updated successfully.',
                 'delete-success' => 'Source deleted successfully.',
                 'delete-failed'  => 'Source can not be deleted.',
@@ -554,6 +568,7 @@
                 'back'           => 'Back',
                 'cancel'         => 'Cancel',
                 'create-success' => 'Type created successfully.',
+                'name-exists'    => 'Type name already exists.',
                 'update-success' => 'Type updated successfully.',
                 'delete-success' => 'Type deleted successfully.',
                 'delete-failed'  => 'Type can not be deleted.',
@@ -642,7 +657,13 @@
                 'update-success' => 'Tag updated successfully.',
                 'delete-success' => 'Tag deleted successfully.',
                 'delete-failed'  => 'Tag can not be deleted.',
-            ]
+            ],
+
+            'web-forms' => [
+                
+                'create-success' => 'Web Form Updated Successfully',
+                'update-success' => 'Web Form Updated Successfully'
+            ],
         ],
 
         'configuration' => [
@@ -662,7 +683,7 @@
         ],
 
         'datagrid' => [
-            'id'                  => 'Id',
+            'id'                  => 'ID',
             'name'                => 'Name',
             'code'                => 'Code',
             'sku'                 => 'SKU',
@@ -674,6 +695,7 @@
             'lead'                => 'Lead',
             'title'               => 'Title',
             'subject'             => 'Subject',
+            'tags'                => 'Tags',
             'emails'              => 'Emails',
             'stage'               => 'Stage',
             'status'              => 'Status',
@@ -710,6 +732,9 @@
             'organization_name'   => 'Organization Name',
             'is-default'          => 'Is Default',
             'rotten-days'         => 'Rotten Days',
+            'yes'                 => 'Yes',
+            'no'                  => 'No',
+            'move-to-inbox'       => 'Move to Inbox',
             'update-success'      => ':resource updated successfully.',
             'destroy-success'     => ':resource deleted successfully.',
             'destroy-failed'      => ':resource can not be deleted.',
@@ -735,6 +760,11 @@
             'lead'            => 'Lead',
             'quotes'          => 'Quotes',
             'mail'            => 'Mail',
+            'inbox'           => 'Inbox',
+            'draft'           => 'Draft',
+            'outbox'          => 'Outbox',
+            'sent'            => 'Sent',
+            'trash'           => 'Trash',
             'activities'      => 'Activities',
             'contacts'        => 'Contacts',
             'persons'         => 'Persons',
@@ -754,10 +784,13 @@
             'workflows'       => 'Workflows',
             'other-settings'  => 'Other Settings',
             'tags'            => 'Tags',
+            'configuration'   => 'Configuration',
             'create'          => 'Create',
             'edit'            => 'Edit',
             'view'            => 'View',
+            'print'           => 'Print',
             'delete'          => 'Delete',
+            'export'          => 'Export',
             'mass-delete'     => 'Mass Delete',
         ],
 
@@ -779,27 +812,36 @@
             'no-result-found'     => 'Records not found with same name.',
             'add-as'              => 'Add as new',
             'not-available'       => 'Not Available',
+            'select-options'      => 'Select Options',
             'yes'                 => 'Yes',
             'no'                  => 'No',
             'delete'              => 'Delete',
             'save'                => 'Save',
             'add-as'              => 'Add as new',
             'no-records-found'    => 'No Records Found',
-            'start-typing'        => 'Start typing to search records'
+            'start-typing'        => 'Start typing to search records',
+            'select-type'         => 'Select Type',
+            'select-call'         => 'Call',
+            'select-meeting'      => 'Meeting',
+            'select-lunch'        => 'Lunch',
+            'duplicate-value'     => 'The value cannot be duplicate'
         ],
 
         'user' => [
             'account' => [
-                'name'              => 'Name',
-                'email'             => 'Email',
-                'password'          => 'Password',
-                'my_account'        => 'My account',
-                'update_details'    => 'Update Details',
-                'current_password'  => 'Current password',
-                'confirm_password'  => 'Confirm password',
-                'password-match'    => 'Current password does not match.',
-                'account-save'      => 'Account changes saved successfully.',
-                'permission-denied' => 'Permission Denied'
+                'name'                  => 'Name',
+                'email'                 => 'Email',
+                'password'              => 'Password',
+                'my_account'            => 'My account',
+                'update_details'        => 'Update Details',
+                'current_password'      => 'Current password',
+                'confirm_password'      => 'Confirm password',
+                'password-match'        => 'Current password does not match.',
+                'account-save'          => 'Account changes saved successfully.',
+                'permission-denied'     => 'Permission Denied',
+                'remove-image'          => 'Remove Image',
+                'upload_image_pix'      => 'Upload a Profile Image (100px x 100px)',
+                'upload_image_format'   =>'in PNG or JPG Format'
             ]
         ],
 

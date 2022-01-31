@@ -89,7 +89,14 @@
                 @endif
             </div>
 
-            <div v-for="block in blocks" :slot="block.id" :key="`block-${block.id}`">
+            <div
+                v-for="block in blocks"
+                :slot="block.id"
+                :key="`block-${block.id}`"
+                class="lead-block"
+                :class="{ 'rotten': block.rotten_days > 0 ? true : false }"
+            >
+
                 <div class="lead-title">@{{ block.title }}</div>
 
                 <div class="icons">
@@ -98,7 +105,10 @@
                 </div>
 
                 <div class="lead-person">
-                    <i class="icon avatar-dark-icon"></i>@{{ block.person_name }}
+                    <i class="icon avatar-dark-icon"></i>
+                        <a :href="`${personIndexUrl}?id[eq]=${block.person_id}`">
+                            @{{ block.person_name }}
+                        </a>
                 </div>
 
                 <div class="lead-cost">
@@ -154,6 +164,7 @@
                     debounce: null,
 
                     totalCounts: [],
+                    personIndexUrl: "{{ route('admin.contacts.persons.index') }}",
                 }
             },
 
@@ -179,7 +190,7 @@
                 getLeads: function (searchedKeyword, filterValues) {
                     this.$root.pageLoaded = false;
 
-                    this.$http.get("{{ route('admin.leads.index', request('pipeline_id')) }}" + `${searchedKeyword ? `?search=${searchedKeyword}` : ''}${filterValues || ''}`)
+                    this.$http.get("{{ route('admin.leads.get', request('pipeline_id')) }}" + `${searchedKeyword ? `?search=${searchedKeyword}` : ''}${filterValues || ''}`)
                         .then(response => {
                             this.$root.pageLoaded = true;
 
@@ -209,7 +220,11 @@
 
                             this.addFlashMessages({message : response.data.message });
                         })
-                        .catch(error => {});
+                        .catch(error => {
+                            window.flashMessages = [{'type': 'error', 'message': error.response.data.message}];
+
+                            this.$root.addFlashMessages();
+                        });
                 },
 
                 search: function (searchedKeyword) {

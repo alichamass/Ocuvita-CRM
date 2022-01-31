@@ -170,7 +170,7 @@
                     <tab name="{{ __('admin::app.leads.contact-person') }}">
                         @include('admin::leads.common.contact', ['formScope' => 'lead-form.'])
 
-                        <contact-component></contact-component>
+                        <contact-component :data='@json(old('person'))'></contact-component>
                     </tab>
 
                     {!! view_render_event('admin.mail.view.actions.leads.create.form_controls.contact_person.after', ['email' => $email]) !!}
@@ -181,7 +181,7 @@
                     <tab name="{{ __('admin::app.leads.products') }}">
                         @include('admin::leads.common.products', ['formScope' => 'lead-form.'])
 
-                        <product-list></product-list>
+                        <product-list :data='@json(old('products'))'></product-list>
                     </tab>
 
                     {!! view_render_event('admin.mail.view.actions.leads.create.form_controls.products.after', ['email' => $email]) !!}
@@ -211,7 +211,7 @@
                     <h1>
                         <span>{{ __('admin::app.mail.link-mail') }}</span>
 
-                        <div class="float-right">
+                        <div class="right">
                             <i class="icon close-icon" @click="show_filter = ! show_filter"></i>
                         </div>
                     </h1>
@@ -381,8 +381,8 @@
                 <email-item-component
                     v-for='(email, index) in email.emails'
                     :email="email"
-                    :key="0"
-                    :index="0"
+                    :key="index + 1"
+                    :index="index + 1"
                     @onEmailAction="emailAction($event)"
                 ></email-item-component>
             </div>
@@ -546,7 +546,8 @@
 
                         @csrf()
 
-                        <input type="hidden" name="parent_id" :value="action.email.id"/>
+                        <!--<input type="hidden" name="parent_id" :value="action.email.id"/>-->
+                        <input type="hidden" name="parent_id" value="{{ request('id') }}"/>
 
                         @include ('admin::common.custom-attributes.edit.email-tags')
 
@@ -554,7 +555,7 @@
                             <label for="to" class="required">{{ __('admin::app.leads.to') }}</label>
     
                             <email-tags-component
-                                control-name="email-form.reply_to[]"
+                                control-name="reply_to[]"
                                 control-label="{{ __('admin::app.leads.to') }}"
                                 :validations="'required'"
                                 :data="reply_to"
@@ -716,6 +717,26 @@
                 @if ($email->person)
                     this.email.person = @json($email->person);
                 @endif
+            },
+
+            mounted: function() {
+                if (! Array.isArray(window.serverErrors)) {
+                    var self = this;
+
+                    if (("{{ old('lead_pipeline_stage_id') }}")) {
+                        this.$root.openModal('addLeadModal');
+
+                        setTimeout(() => {
+                            self.$root.addServerErrors('lead-form');
+                        });
+                    } else {
+                        this.$root.openModal('addPersonModal');
+
+                        setTimeout(() => {
+                            self.$root.addServerErrors('person-form');
+                        });
+                    }
+                }
             },
 
             methods: {
@@ -924,13 +945,26 @@
             mounted: function() {
                 tinymce.remove('#reply');
 
+                var self = this;
+
                 tinymce.init({
                     selector: 'textarea#reply',
+
                     height: 200,
+
                     width: "100%",
+                    
                     plugins: 'image imagetools media wordcount save fullscreen code table lists link hr',
+
                     toolbar1: 'formatselect | bold italic strikethrough forecolor backcolor link hr | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent  | removeformat | code | table',
-                    image_advtab: true
+
+                    image_advtab: true,
+
+                    setup: function(editor) {
+                        editor.on('keyUp', function() {
+                            self.$validator.validate('email-form.reply', this.getContent());
+                        });
+                    }
                 });
             },
 
