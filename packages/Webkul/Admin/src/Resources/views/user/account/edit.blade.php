@@ -17,7 +17,7 @@
 @section('content-wrapper')
     <div class="content full-page adjacent-center">
 
-        <form method="POST" action="{{ route('admin.user.account.update') }}" @submit.prevent="onSubmit">
+        <form method="POST" action="{{ route('admin.user.account.update') }}" enctype="multipart/form-data" @submit.prevent="onSubmit">
             <div class="page-content">
                 <div class="form-container">
 
@@ -40,12 +40,25 @@
                             @csrf()
 
                             <input name="_method" type="hidden" value="PUT">
-                
+
+                            <upload-profile-image></upload-profile-image>
+
+                            @if(isset($user->image_url) && $user->image_url != NULL)
+                                <input 
+                                    type="checkbox"
+                                    name="remove_image"
+                                />
+
+                                <label for="remove" class="">
+                                    {{ __('admin::app.user.account.remove-image') }}
+                                </label>                  
+                            @endif  
+
                             <div class="form-group" :class="[errors.has('name') ? 'has-error' : '']">
                                 <label for="name" class="required">
                                     {{ __('admin::app.user.account.name') }}
                                 </label>
-                    
+
                                 <input
                                     type="text"
                                     name="name"
@@ -146,3 +159,65 @@
         </form>
     </div>
 @stop
+
+
+@push('scripts')
+    <script type="text/x-template" id="upload-profile-image-template">
+        <div class="form-group">
+            <div class="image-upload-brick">
+                <input
+                    type="file"
+                    name="image"
+                    id="upload-profile"
+                    ref="imageInput"
+                    @change="addImageView($event)"
+                >
+
+                <i class="icon upload-icon"></i>
+
+                <img class="preview" :src="imageData" v-if="imageData.length > 0">
+            </div>
+
+            <div class="image-info-brick">
+                <span class="field-info">
+                {{ __('admin::app.user.account.upload_image_pix') }} <br>
+                {{ __('admin::app.user.account.upload_image_format') }}
+                </span>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        Vue.component('upload-profile-image', {
+            template: '#upload-profile-image-template',
+
+            data: function() {
+                return {
+                    imageData: "{{ $user->image_url }}",
+                }
+            },
+
+            methods: {
+                addImageView () {
+                    var imageInput = this.$refs.imageInput;
+
+                    if (imageInput.files && imageInput.files[0]) {
+                        if (imageInput.files[0].type.includes('image/')) {
+                            var reader = new FileReader();
+
+                            reader.onload = (e) => {
+                                this.imageData = e.target.result;
+                            }
+
+                            reader.readAsDataURL(imageInput.files[0]);
+                        } else {
+                            imageInput.value = '';
+
+                            alert('{{ __('admin::app.user.account.image_upload_message') }}');
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+@endpush

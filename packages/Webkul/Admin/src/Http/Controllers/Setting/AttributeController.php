@@ -60,7 +60,7 @@ class AttributeController extends Controller
     public function store()
     {
         $this->validate(request(), [
-            'code' => ['required', 'unique:attributes,code', new Code],
+            'code' => ['required', 'unique:attributes,code,NULL,NULL,entity_type,' . request('entity_type'), new Code],
             'name' => 'required',
             'type' => 'required',
         ]);
@@ -100,7 +100,7 @@ class AttributeController extends Controller
     public function update($id)
     {
         $this->validate(request(), [
-            'code' => ['required', 'unique:attributes,code,' . $id, new Code],
+            'code' => ['required', 'unique:attributes,code,NULL,NULL,entity_type,' . $id, new Code],
             'name' => 'required',
             'type' => 'required',
         ]);
@@ -127,31 +127,27 @@ class AttributeController extends Controller
         $attribute = $this->attributeRepository->findOrFail($id);
 
         if (! $attribute->is_user_defined) {
-            session()->flash('error', trans('admin::app.settings.attributes.user-define-error'));
-        } else {
-            try {
-                Event::dispatch('settings.attribute.delete.before', $id);
-
-                $this->attributeRepository->delete($id);
-
-                Event::dispatch('settings.attribute.delete.after', $id);
-
-                return response()->json([
-                    'status'    => true,
-                    'message'   => trans('admin::app.response.destroy-success', ['name' => trans('admin::app.settings.attributes.attribute')]),
-                ], 200);
-            } catch(\Exception $exception) {
-                return response()->json([
-                    'status'    => false,
-                    'message'   => trans('admin::app.settings.attributes.delete-failed'),
-                ], 400);
-            }
+            return response()->json([
+                'message' => trans('admin::app.settings.attributes.user-define-error'),
+            ], 400);
         }
 
-        return response()->json([
-            'status'    => false,
-            'message'   => trans('admin::app.settings.attributes.delete-failed'),
-        ], 400);
+        try {
+            Event::dispatch('settings.attribute.delete.before', $id);
+
+            $this->attributeRepository->delete($id);
+
+            Event::dispatch('settings.attribute.delete.after', $id);
+
+            return response()->json([
+                'status'  => true,
+                'message' => trans('admin::app.response.destroy-success', ['name' => trans('admin::app.settings.attributes.attribute')]),
+            ], 200);
+        } catch(\Exception $exception) {
+            return response()->json([
+                'message' => trans('admin::app.settings.attributes.delete-failed'),
+            ], 400);
+        }
     }
 
     /**
@@ -174,16 +170,32 @@ class AttributeController extends Controller
      */
     public function massDestroy()
     {
-        $data = request()->all();
+        $count = 0;
 
-        $this->attributeRepository
-            ->where('is_user_defined', 1)
-            ->whereIn('id', $data['rows'])
-            ->delete();
+        foreach (request('rows') as $attributeId) {
+            $attribute = $this->attributeRepository->find($attributeId);
+
+            if (! $attribute->is_user_defined) {
+                continue;
+            }
+
+            Event::dispatch('settings.attribute.delete.before', $attributeId);
+
+            $this->attributeRepository->delete($attributeId);
+
+            Event::dispatch('settings.attribute.delete.after', $attributeId);
+
+            $count++;
+        }
+
+        if (! $count) {
+            return response()->json([
+                'message' => trans('admin::app.settings.attributes.mass-delete-failed'),
+            ], 400);
+        }
 
         return response()->json([
-            'status'    => true,
-            'message'   => trans('admin::app.response.destroy-success', ['name' => trans('admin::app.settings.attributes.title')]),
+            'message' => trans('admin::app.response.destroy-success', ['name' => trans('admin::app.settings.attributes.title')]),
         ]);
     }
 
